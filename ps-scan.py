@@ -54,20 +54,22 @@ Version: 1.0.4
             self.getModules()
             pass
 
-    # Check version prestashop
+    # Check version of Prestashop
     def isPresta(self):
-        resp = requests.get(self.target)
+        resp = requests.get(self.target, headers=self.headers)
 
         if "prestashop" in resp.text:
             print("[+] Website using Prestashop")
             open(self.informationFromScan+'/home.txt', 'w', encoding='utf-8').write(resp.text)
             return True
-        resp = requests.get(target+'/INSTALL.txt',  headers=self.headers)
+        # Corrected: use self.target instead of target
+        resp = requests.get(self.target+'/INSTALL.txt', headers=self.headers)
         if "prestashop" in resp.text:
             print("[+] Website using Prestashop")
             open(self.informationFromScan+'/home.txt', 'w', encoding='utf-8').write(resp.text)
             return True
         return False
+
     # Try bruteforce admin panel dir
     def checkAdminDir(self):
 
