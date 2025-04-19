@@ -278,28 +278,31 @@ Version: 1.0.4
 
 if __name__ == "__main__":
 
+    # if they only passed “-h” (your host‐flag) but no URL, treat it like “no args”
+    if len(sys.argv) == 2 and sys.argv[1] in ("-h", "--host"):
+        print("\nYou can check flags using: ps-scan.py help\n")
+        sys.exit()
+
     if len(sys.argv) == 1:
         print("\nYou can check flags using: ps-scan.py help\n")
         sys.exit()
 
-    if not sys.argv[1]:
-        print("\nYou can check flags using: ps-scan.py help\n")
-        sys.exit()
-
+    # now it’s safe to assume sys.argv[1] exists and (if it’s -h) that sys.argv[2] also exists
     if sys.argv[1] == 'help':
-
         helpFlags = '''
     -h      --host              Host to scan (https://example.com)
     -wv     --without-version   searching CVEs without number version 
         '''
         print(helpFlags)
+        sys.exit()
 
     if '-h' in sys.argv:
-        ans =input("\nDo you have permission to scan this website? [y/n] ")
-        if ans == 'y':
+        ans = input("\nDo you have permission to scan this website? [y/n] ")
+        if ans.lower() == 'y':
             PsScan(sys.argv)
         else:
-            pass
+            sys.exit()
     else:
         print("\nExample using: python3 ps-scan.py -h https://example.com")
-        pass
+        sys.exit()
+
